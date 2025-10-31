@@ -1,13 +1,43 @@
+# backend/node_modules
+# frontend/node_modules
+# backend/.env
+# frontend/.env
+# backend/vision-key.json
+# *.log
 
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
 backend/node_modules
 frontend/node_modules
 
+# Builds
+backend/dist
+frontend/dist
+frontend/dist-ssr
 
+# Environment files
 backend/.env
 frontend/.env
-
-
 backend/vision-key.json
 
+# Misc
+*.local
+*.DS_Store
 
-*.log
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
