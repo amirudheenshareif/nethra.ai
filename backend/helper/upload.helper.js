@@ -15,11 +15,11 @@ dotenv.config();
 export const preProcessImage = async(buffer) => {
       try {
         const processedImage = await sharp(buffer)
-        .grayscale()
-        .normalize()
-        .threshold(180) 
-        .sharpen()
-        .resize({ width: 2500 })
+        .grayscale() // removes color
+        .normalize() // increase contrast
+        .threshold(180) // make characters crisp
+        .sharpen() // make edges crisp
+        .resize({ width: 2500 }) // enlarging for better ocr
         .toBuffer();
 
          return processedImage;
@@ -116,10 +116,10 @@ export const generateJSONFromPrompt = async (systemPrompt) => {
        console.log("Gemini response:");
        let response = res.data.candidates?.[0]?.content?.parts?.[0]?.text || res.data;
 
-       // Remove Markdown fences like ```json ... ```
+       // Removes Markdown fences like ```json ... ```
        response = response.replace(/```json|```/g, '').trim();
 
-       // Optional: also remove any accidental whitespace or newlines at the start/end
+       // Removes white space
        response = response.replace(/^[\s\n]+|[\s\n]+$/g, '');
 
 
@@ -138,7 +138,7 @@ export const generateJSONFromPrompt = async (systemPrompt) => {
 
 let worker = null;
 
-async function initializeWorker() {
+async function initializeWorker() { // This lets us run OCR tasks in background
   if (worker) return worker;
   
   worker = await createWorker('eng', 1, {
@@ -159,7 +159,7 @@ export const callTesseract = async (imageBuffer) => {
   }
 };
 
-export async function terminateWorker() {
+export async function terminateWorker() { // Once OCR tasks are done, use this to free up memory
   if (worker) {
     await worker.terminate();
     worker = null;
