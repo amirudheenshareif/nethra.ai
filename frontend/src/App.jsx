@@ -1,10 +1,11 @@
 import './App.css'
+import { ExamIntroPage } from './pages/ExamIntroPage'
 
 function App() {
 
   return (
     <>
-    <h1>App</h1>
+   <ExamIntroPage/>
     </>
   )
 }
