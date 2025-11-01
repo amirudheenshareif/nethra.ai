@@ -1,10 +1,11 @@
 import { Mic } from "lucide-react";
-import { useEffect } from "react";
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-
+import { useRef,useEffect } from "react";
 
 
 export const  ExamIntroPage = () => {
+
+    const intervalRef = useRef(null);
 
     const examIntro = async () => {
         const message = "Welcome user, You are now on the examination page. Tap anywhere on the screen when you are ready";
@@ -21,7 +22,6 @@ export const  ExamIntroPage = () => {
                     outputFormat: 'mp3_44100_128',
                 }
             );
-
             const audioBlob = await new Response(audioStream).blob();
             const audioUrl = URL.createObjectURL(audioBlob);
             const audio = new Audio(audioUrl);
@@ -32,10 +32,29 @@ export const  ExamIntroPage = () => {
          }  
     }
 
+const handleTap = () => {
+    examIntro();
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(examIntro, 10000);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div onClick={examIntro} className="bg-[linear-gradient(135deg,#0a0e27_0%,#1a1f3a_50%,#0f1829_100%)] w-full min-h-screen flex flex-col justify-center items-center p-4" >
-        <h1 className="text-2xl font-semibold tracking-tight mb-3 text-white text-center">EXAMINATION PAGE </h1>
-        <p className="text-[#cbd5e1] opacity-0.9">Tap anywhere to continue</p>
+    <div onClick={handleTap} className="bg-[linear-gradient(135deg,#0a0e27_0%,#1a1f3a_50%,#0f1829_100%)] w-full min-h-screen flex flex-col justify-center items-center p-4" >
+        <h1 className="text-2xl font-semibold tracking-tight mb-3 text-white text-center">
+            EXAMINATION PAGE
+        </h1>
+        <p className="text-[#cbd5e1] opacity-0.9">
+            Tap anywhere to continue
+        </p>
          <Mic className="w-12 h-12 mt-6 text-blue-500 animate-pulse" />
     </div>
   );
